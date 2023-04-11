@@ -1,25 +1,23 @@
 import './App.css';
 import {useEffect, useState} from "react";
+import Button from '@mui/material/Button';
+import FolderList from "./components/List";
+import API from "./api/products";
 
 function App() {
-  const [products, setProducts] = useState([]);
-  useEffect(() => {
-    fetch('http://localhost:8080/API/products/')
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          setProducts(data);
-        })
-        .catch((err) => {
-          console.log(err.message);
-            setProducts(err.message)
-        });
-  }, []);
+    const [products, setProducts] = useState([]);
+    useEffect(() => {
+        async function loadProducts() {
+            const loadedProducts = await API.getProducts();
+            setProducts(loadedProducts);
+        } loadProducts();
+    }, []);
   return (
     <div className="App">
         <p>Hello ReactJS!</p>
         <div className="products-container">
-            {products}
+            <Button variant="contained">Get Products</Button>
+            <FolderList products={products}></FolderList>
         </div>
     </div>
   );
