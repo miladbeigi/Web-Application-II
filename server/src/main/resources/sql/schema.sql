@@ -9,6 +9,16 @@ create table if not exists products (
                                         name varchar(255),
                                         brand varchar(255));
 
+drop table profiles;
+create table if not exists profiles (
+                    email varchar(255) primary key,
+                    name varchar(255),
+                    lastname varchar(255)
+);
+
+insert into profiles (email, name, lastname) VALUES ('milad.be@gmail.com', 'Milad', 'Beigi'),
+                                                    ('shayan@gmail.com', 'Shayan', 'Taghinezhad');
+
 insert into products (ean, name, brand) values
                                             ('1234567890123', 'iPhone 6', 'Apple'),
                                             ('1234567890124', 'iPhone 6 Plus', 'Apple'),
