@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController
 class ProductController (
     private val productService: ProductService
 ) {
-    @GetMapping("/products")
+    @GetMapping("/api/products")
     fun getAllProducts(): List<ProductDTO> { return productService.getAllProducts()}
-    @GetMapping("/products/{ean}")
+    @GetMapping("/api/products/{ean}")
     fun getProductById(@PathVariable ean: String ): ProductDTO? { return productService.getProductById(ean) }
 }
