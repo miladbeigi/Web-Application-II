@@ -8,4 +8,8 @@ class ProfileServiceImp (private val profileRepository: ProfileRepository) : Pro
     override fun getProfileByEmail(email: String): ProfileDTO? {
         return profileRepository.findById(email).map { it.toDTO() }.orElse(null)
     }
+
+    override fun createProfile(profile: Profile): String {
+        return profileRepository.save(profile).email
+    }
 }
