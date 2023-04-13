@@ -8,5 +8,17 @@ async function getProducts() {
     }
 }
 
-const API = { getProducts }
-export default API;
+async function getProductById() {
+    const response = await fetch("/api/products/1234567890123");
+    const product = await response.json();
+    if (response.ok) {
+        return product;
+    } else {
+        return response;
+    }
+}
+
+
+
+const ProductsAPI = { getProducts, getProductById }
+export default ProductsAPI;

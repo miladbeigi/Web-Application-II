@@ -6,7 +6,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import ImageIcon from '@mui/icons-material/Image';
 
-export default function FolderList(props) {
+export function FolderList(props) {
     return (
         <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
             {props.products.map((product) => (
@@ -21,3 +21,19 @@ export default function FolderList(props) {
         </List>
     );
 }
+
+export function ProfileList(props) {
+    return (
+        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                <ListItem>
+                    <ListItemAvatar>
+                        <Avatar>
+                            <ImageIcon />
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={props.profile.name} secondary={props.profile.lastname} />
+                </ListItem>
+        </List>
+    );
+}
+
