@@ -4,12 +4,12 @@ async function getProducts() {
     if (response.ok) {
         return products;
     } else {
-        return response;
+        return response.json();
     }
 }
 
-async function getProductById() {
-    const response = await fetch("/api/products/1234567890123");
+async function getProductById(text) {
+    const response = await fetch("/api/products/" + text);
     const product = await response.json();
     if (response.ok) {
         return product;
