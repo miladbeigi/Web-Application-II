@@ -11,4 +11,4 @@ class Product {
     var ean: String = ""
     var name: String = ""
     var brand: String = ""
-}
+}    
