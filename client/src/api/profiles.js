@@ -1,7 +1,6 @@
-async function getProfileByEmail() {
-    const response = await fetch("/api/profiles/milad.be@gmail.com");
+async function getProfileByEmail(text) {
+    const response = await fetch("/api/profiles/"+text);
     const profile = await response.json();
-    console.log(response)
     if (response.ok) {
         return profile;
     } else {
@@ -9,5 +8,32 @@ async function getProfileByEmail() {
     }
 }
 
-const ProfilesAPI = { getProfileByEmail }
+async function addProfile(profile) {
+    const response = await fetch("/api/profiles", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(profile),
+      });
+      if (response.ok) {
+        return response;
+      } else {
+        return response;
+      }
+}
+
+async function updateProfile(profile) {
+  const response = await fetch("/api/profiles/" + profile.email , {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(profile),
+    });
+    if (response.ok) {
+      return response;
+    } else {
+      return response;
+    }
+}
+
+
+const ProfilesAPI = { getProfileByEmail , addProfile, updateProfile}
 export default ProfilesAPI;

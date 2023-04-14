@@ -21,19 +21,3 @@ export function FolderList(props) {
         </List>
     );
 }
-
-export function ProfileList(props) {
-    return (
-        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <ImageIcon />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={props.profile.name} secondary={props.profile.lastname} />
-                </ListItem>
-        </List>
-    );
-}
-
