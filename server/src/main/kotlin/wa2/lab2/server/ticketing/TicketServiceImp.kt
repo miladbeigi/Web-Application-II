@@ -3,6 +3,7 @@ import wa2.lab2.server.products.ProductService
 import wa2.lab2.server.profiles.ProfileService
 import wa2.lab2.server.products.exceptions.ProductNotFoundException
 import wa2.lab2.server.profiles.exceptions.ProfileNotFoundException
+import wa2.lab2.server.ticketing.exceptions.TicketStatusNotPermittedException
 
 class TicketServiceImp(
     private val ticketRepository: TicketRepository,
@@ -38,5 +39,27 @@ class TicketServiceImp(
         // Save the ticket
         val savedTicket = ticketRepository.save(ticket)
         return savedTicket.id
+    }
+
+    override fun ChangeTicketStatusTo(
+        id: Long,
+        newStatus: TicketStatus
+    ): Long {
+        val allowedNextStatus = mapOf(
+            TicketStatus.Open to listOf<TicketStatus>(TicketStatus.Resolved, TicketStatus.Closed, TicketStatus.InProgress),
+            TicketStatus.Resolved to listOf<TicketStatus>(TicketStatus.Closed, TicketStatus.ReOpened),
+            TicketStatus.Closed to listOf<TicketStatus>(TicketStatus.ReOpened),
+            TicketStatus.ReOpened to listOf<TicketStatus>(TicketStatus.Resolved, TicketStatus.Closed, TicketStatus.InProgress),
+            TicketStatus.InProgress to listOf<TicketStatus>(TicketStatus.Open, TicketStatus.Closed, TicketStatus.Resolved)
+        )
+        val ticket = ticketRepository.getReferenceById(id)
+        if (allowedNextStatus[ticket.status]?.contains(newStatus) == true) {
+            ticket.status = newStatus
+            ticketRepository.save(ticket)
+        }
+        else {
+            throw TicketStatusNotPermittedException("Status change from ${ticket.status} to $newStatus is not permitted!")
+        }
+        return ticket.id
     }
 }

@@ -7,4 +7,9 @@ interface TicketService {
         productId: String,
         profileId: String
     ): Long
+
+    fun ChangeTicketStatusTo(
+        id: Long,
+        newStatus: TicketStatus
+    ): Long
 }
