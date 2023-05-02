@@ -10,7 +10,7 @@ data class Ticket(
     val title: String,
     val description: String,
     val productId: String,
-    var status: TicketStatus = TicketStatus.InProgress,
+    val status: TicketStatus = TicketStatus.InProgress,
     val profileId: String,
     val priority: TicketPriority?,
     val expertId: String?
