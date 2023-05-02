@@ -20,3 +20,7 @@ data class ProfileDTO(
 fun Profile.toDTO(): ProfileDTO {
     return ProfileDTO(email, name, lastname)
 }
+
+fun ProfileDTO.toEntity(): Profile {
+    return Profile(email, name, lastname)
+}
