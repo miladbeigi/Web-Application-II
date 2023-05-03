@@ -16,6 +16,7 @@ import wa2.lab2.server.products.exceptions.ProductNotFoundException
 import wa2.lab2.server.profiles.ProfileRepository
 import wa2.lab2.server.profiles.ProfileServiceImp
 import wa2.lab2.server.profiles.exceptions.ProfileNotFoundException
+import wa2.lab2.server.ticketing.TicketHistoryRepository
 import wa2.lab2.server.ticketing.TicketRepository
 import wa2.lab2.server.ticketing.TicketServiceImp
 
@@ -46,6 +47,9 @@ class ServerApplicationTests {
 
     @Autowired
     lateinit var productRepository: ProductRepository
+
+    @Autowired
+    lateinit var ticketHistoryRepository: TicketHistoryRepository
 
     @Test
     fun contextLoads() {
@@ -85,6 +89,7 @@ class ServerApplicationTests {
 
         val ticketService = TicketServiceImp(
             ticketRepository,
+            ticketHistoryRepository,
             productService,
             profileService
         )

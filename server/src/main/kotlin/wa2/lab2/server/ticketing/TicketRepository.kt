@@ -6,3 +6,7 @@ import org.springframework.stereotype.Repository
 @Repository
 interface TicketRepository : JpaRepository<Ticket, Long> {
 }
+
+@Repository
+interface TicketHistoryRepository : JpaRepository<TicketHistory, Long> {
+}

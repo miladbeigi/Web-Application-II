@@ -15,7 +15,12 @@ class TicketController (private val ticketService: TicketService) {
         produces = ["application/json"]
     )
     fun createTicket(@RequestBody @Valid ticket: TicketDTO): Long? {
-        return ticketService.createTicket(ticket.title, ticket.description, ticket.productId, ticket.profileId)
+        return ticketService.createTicket(
+            ticket.title,
+            ticket.description,
+            ticket.productId,
+            ticket.profileId
+        )
     }
 
     @PutMapping(
@@ -28,6 +33,15 @@ class TicketController (private val ticketService: TicketService) {
     }
 
     @PutMapping(
+        value = ["/api/ticket/stop"],
+        consumes = ["application/json"],
+        produces = ["application/json"]
+    )
+    fun stopTicket(@RequestBody @Valid ticket: TicketDTO): Long? {
+        return ticketService.stopTicket(ticket.id)
+    }
+
+    @PutMapping(
         value = ["/api/ticket/close"],
         consumes = ["application/json"],
         produces = ["application/json"]
@@ -35,9 +49,21 @@ class TicketController (private val ticketService: TicketService) {
     fun closeTicket(@RequestBody @Valid ticket: TicketDTO): Long? {
         return ticketService.closeTicket(ticket.id)
     }
+
+    @PutMapping(
+        value = ["/api/ticket/reopen"],
+        consumes = ["application/json"],
+        produces = ["application/json"]
+    )
     fun reopenTicket(@RequestBody @Valid ticket: TicketDTO): Long? {
         return ticketService.reopenTicket(ticket.id)
     }
+
+    @PutMapping(
+        value = ["/api/ticket/resolve"],
+        consumes = ["application/json"],
+        produces = ["application/json"]
+    )
     fun resolveTicket(@RequestBody @Valid ticket: TicketDTO): Long?{
         return ticketService.resolveTicket(ticket.id)
     }
