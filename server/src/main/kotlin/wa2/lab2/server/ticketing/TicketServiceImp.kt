@@ -78,14 +78,48 @@ class TicketServiceImp(
     }
 
     override fun closeTicket(ticketId: String): Long? {
-        TODO("Not yet implemented")
+        // Check if the ticket exists
+        var ticket : Ticket? = ticketRepository.findById(ticketId.toLong()).orElse(null)
+            ?: throw TicketExceptions("Ticket with id $ticketId not found")
+
+        // Ticket status can be closed from any other status
+        if (ticket != null) {
+            ticket.status = TicketStatus.Closed
+            val updatedTicket = ticketRepository.save(ticket)
+            return updatedTicket.id
+        }
+        return null
     }
 
     override fun reopenTicket(ticketId: String): Long? {
-        TODO("Not yet implemented")
+        // Check if the ticket exists
+        var ticket : Ticket? = ticketRepository.findById(ticketId.toLong()).orElse(null)
+            ?: throw TicketExceptions("Ticket with id $ticketId not found")
+
+        // Update the ticket status only if it is closed or resolved
+        if (ticket != null) {
+            if (ticket.status == TicketStatus.Closed || ticket.status == TicketStatus.Resolved) {
+                ticket.status = TicketStatus.ReOpened
+                val updatedTicket = ticketRepository.save(ticket)
+                return updatedTicket.id
+            } else throw TicketExceptions("Ticket with id $ticketId cannot be reopened")
+        }
+        return null
     }
 
     override fun resolveTicket(ticketId: String): Long? {
-        TODO("Not yet implemented")
+        // Check if the ticket exists
+        var ticket : Ticket? = ticketRepository.findById(ticketId.toLong()).orElse(null)
+            ?: throw TicketExceptions("Ticket with id $ticketId not found")
+
+        // Update the ticket status only if it is in open, reopened and in progress
+        if (ticket != null) {
+            if (ticket.status == TicketStatus.Open || ticket.status == TicketStatus.ReOpened || ticket.status == TicketStatus.InProgress) {
+                ticket.status = TicketStatus.Resolved
+                val updatedTicket = ticketRepository.save(ticket)
+                return updatedTicket.id
+            } else throw TicketExceptions("Ticket with id $ticketId cannot be resolved")
+        }
+        return null
     }
 }
