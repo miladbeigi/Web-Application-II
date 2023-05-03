@@ -27,13 +27,18 @@ class TicketController (private val ticketService: TicketService) {
         return ticketService.startTicket(ticket.id)
     }
 
-    fun closeTicket() {
-        TODO("Not yet implemented")
+    @PutMapping(
+        value = ["/api/ticket/close"],
+        consumes = ["application/json"],
+        produces = ["application/json"]
+    )
+    fun closeTicket(@RequestBody @Valid ticket: TicketDTO): Long? {
+        return ticketService.closeTicket(ticket.id)
     }
-    fun reopenTicket() {
-        TODO("Not yet implemented")
+    fun reopenTicket(@RequestBody @Valid ticket: TicketDTO): Long? {
+        return ticketService.reopenTicket(ticket.id)
     }
-    fun resolveTicket(){
-        TODO("Not yet implemented")
+    fun resolveTicket(@RequestBody @Valid ticket: TicketDTO): Long?{
+        return ticketService.resolveTicket(ticket.id)
     }
 }
