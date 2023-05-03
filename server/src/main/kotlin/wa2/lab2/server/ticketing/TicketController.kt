@@ -1,10 +1,7 @@
 package wa2.lab2.server.ticketing
 
 import jakarta.validation.Valid
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 class TicketController (private val ticketService: TicketService) {
@@ -24,47 +21,42 @@ class TicketController (private val ticketService: TicketService) {
     }
 
     @PutMapping(
-        value = ["/api/ticket/start"],
-        consumes = ["application/json"],
+        value = ["/api/ticket/start/{id}"],
         produces = ["application/json"]
     )
-    fun startTicket(@RequestBody @Valid ticket: TicketDTO): Long? {
-        return ticketService.startTicket(ticket.id)
+    fun startTicket(@PathVariable id: String): Long? {
+        return ticketService.startTicket(id)
     }
 
     @PutMapping(
-        value = ["/api/ticket/stop"],
-        consumes = ["application/json"],
+        value = ["/api/ticket/stop/{id}"],
         produces = ["application/json"]
     )
-    fun stopTicket(@RequestBody @Valid ticket: TicketDTO): Long? {
-        return ticketService.stopTicket(ticket.id)
+    fun stopTicket(@PathVariable id: String): Long? {
+        return ticketService.stopTicket(id)
     }
 
     @PutMapping(
-        value = ["/api/ticket/close"],
-        consumes = ["application/json"],
+        value = ["/api/ticket/close/{id}"],
         produces = ["application/json"]
     )
-    fun closeTicket(@RequestBody @Valid ticket: TicketDTO): Long? {
-        return ticketService.closeTicket(ticket.id)
+    fun closeTicket(@PathVariable id: String): Long? {
+        return ticketService.closeTicket(id)
     }
 
     @PutMapping(
-        value = ["/api/ticket/reopen"],
-        consumes = ["application/json"],
+        value = ["/api/ticket/reopen/{id}"],
         produces = ["application/json"]
     )
-    fun reopenTicket(@RequestBody @Valid ticket: TicketDTO): Long? {
-        return ticketService.reopenTicket(ticket.id)
+    fun reopenTicket(@PathVariable id: String): Long? {
+        return ticketService.reopenTicket(id)
     }
 
     @PutMapping(
-        value = ["/api/ticket/resolve"],
-        consumes = ["application/json"],
+        value = ["/api/ticket/resolve/{id}"],
         produces = ["application/json"]
     )
-    fun resolveTicket(@RequestBody @Valid ticket: TicketDTO): Long?{
-        return ticketService.resolveTicket(ticket.id)
+    fun resolveTicket(@PathVariable id: String): Long?{
+        return ticketService.resolveTicket(id)
     }
 }
