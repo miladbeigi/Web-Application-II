@@ -6,13 +6,16 @@ interface EmployeeService {
         lastname: String,
         email: String,
         managerId: String?,
-        expertise: Expertise
-    ): Long
+        expertise: String
+    ): ExpertDTO
+
+    fun getExpert(
+        id: String?
+    ): Expert?
 
     fun addManager(
         name: String,
         lastname: String,
         email: String
-    ): Long
-
+    ): ManagerDTO?
 }

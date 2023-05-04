@@ -10,9 +10,17 @@ interface TicketService {
         productId: String,
         profileId: String
     ): Long?
+
+    fun assignTicket(
+        ticketId: String,
+        title: String,
+        description: String,
+        expert : String?,
+        priority: String?
+    ): TicketDTO?
+
     fun startTicket(
         ticketId: String
-
     ) : Long?
     fun stopTicket(
         ticketId: String

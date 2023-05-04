@@ -19,6 +19,16 @@ data class Expert(
 )
 
 
+fun Expert.toDTO(): ExpertDTO {
+    return ExpertDTO(
+        id = this.id,
+        name = this.name,
+        lastname = this.lastname,
+        email = this.email,
+        manager = manager?.email,
+        expertise = expertise.name
+    )
+}
 enum class Expertise {
     Software, Hardware, Network
 }

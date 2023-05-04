@@ -8,7 +8,7 @@ import jakarta.persistence.Id
 data class Manager(
     @GeneratedValue
     @Id
-    val id: Long,
+    val id: Long? = null,
     val name: String,
     val lastname: String,
     val email: String

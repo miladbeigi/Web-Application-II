@@ -20,6 +20,15 @@ class TicketController (private val ticketService: TicketService) {
         )
     }
 
+    fun assignTicket(@RequestBody @Valid ticket: TicketDTO): TicketDTO? {
+        return ticketService.assignTicket(
+            ticket.id,
+            ticket.title,
+            ticket.description,
+            ticket.expert,
+            ticket.priority
+        )
+    }
     @PutMapping(
         value = ["/api/ticket/start/{id}"],
         produces = ["application/json"]

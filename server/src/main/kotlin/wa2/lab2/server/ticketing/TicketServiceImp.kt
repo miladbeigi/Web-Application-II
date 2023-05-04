@@ -1,6 +1,7 @@
 package wa2.lab2.server.ticketing
 
 import org.springframework.stereotype.Service
+import wa2.lab2.server.employee.EmployeeService
 import wa2.lab2.server.products.ProductService
 import wa2.lab2.server.profiles.ProfileService
 import wa2.lab2.server.products.exceptions.ProductNotFoundException
@@ -16,7 +17,8 @@ class TicketServiceImp(
     private val ticketRepository: TicketRepository,
     private val ticketHistoryRepository: TicketHistoryRepository,
     private val productService: ProductService,
-    private val profileService: ProfileService
+    private val profileService: ProfileService,
+    private val employeeService: EmployeeService
 ) : TicketService {
 
     fun saveTicketHistory(
@@ -64,6 +66,49 @@ class TicketServiceImp(
         saveTicketHistory(ticket, null, savedTicket.status)
 
         return savedTicket.id
+    }
+
+    override fun assignTicket(
+        ticketId: String,
+        title: String,
+        description: String,
+        expert : String?,
+        priority: String?
+    ): TicketDTO? {
+
+        // Check if the ticket exists
+        val ticket: Ticket? = ticketRepository.findById(ticketId.toLong()).orElse(null)
+            ?: throw TicketExceptions("Ticket with id $ticketId not found")
+
+        // Check if expert exists
+        val expertProfile = employeeService.getExpert(expert)
+            ?: throw TicketExceptions("Expert with id $expert not found")
+
+        // Set the priority according to the values in the enum
+        val ticketPriority = when (priority) {
+            "1" -> TicketPriority.Low
+            "2" -> TicketPriority.Medium
+            "3" -> TicketPriority.High
+            else -> throw TicketExceptions("Priority $priority is not valid")
+        }
+
+        // Update the ticket
+        if (ticket != null) {
+            val newTicket = Ticket(
+                id = ticket.id,
+                title = title,
+                description = description,
+                product = ticket.product,
+                status = ticket.status,
+                profile = ticket.profile,
+                priority = ticketPriority,
+                expert = expertProfile
+            )
+
+            val updatedTicket = ticketRepository.save(newTicket)
+            return updatedTicket.toDTO()
+        }
+        return null
     }
 
     override fun startTicket(ticketId: String): Long? {

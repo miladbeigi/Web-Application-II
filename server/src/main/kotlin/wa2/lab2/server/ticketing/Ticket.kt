@@ -24,7 +24,6 @@ data class Ticket(
     @OneToOne
     val expert: Expert?
 )
-
 enum class TicketStatus {
     Open, InProgress, Closed, Resolved, ReOpened
 }
