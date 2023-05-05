@@ -1,25 +1,32 @@
 package wa2.lab2.server
 
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
+import wa2.lab2.server.employee.EmployeeServiceImp
+import wa2.lab2.server.employee.ExpertRepository
+import wa2.lab2.server.employee.Expertise
+import wa2.lab2.server.employee.ManagerRepository
+import wa2.lab2.server.employee.exceptions.EmployeeExceptions
 import wa2.lab2.server.products.ProductRepository
 import wa2.lab2.server.products.ProductServiceImp
 import wa2.lab2.server.products.exceptions.ProductNotFoundException
 import wa2.lab2.server.profiles.ProfileRepository
 import wa2.lab2.server.profiles.ProfileServiceImp
 import wa2.lab2.server.profiles.exceptions.ProfileNotFoundException
-import wa2.lab2.server.ticketing.TicketHistoryRepository
-import wa2.lab2.server.ticketing.TicketRepository
-import wa2.lab2.server.ticketing.TicketServiceImp
-import wa2.lab2.server.ticketing.TicketStatus
+import wa2.lab2.server.ticketing.*
 import wa2.lab2.server.ticketing.exceptions.TicketExceptions
 
 @Testcontainers
@@ -54,6 +61,12 @@ class ServerApplicationTests {
     lateinit var ticketHistoryRepository: TicketHistoryRepository
 
     @Autowired
+    lateinit var expertRepository: ExpertRepository
+
+    @Autowired
+    lateinit var managerRepository: ManagerRepository
+
+    @Autowired
     lateinit var ticketService: TicketServiceImp
 
     @Autowired
@@ -62,38 +75,60 @@ class ServerApplicationTests {
     @Autowired
     lateinit var productService: ProductServiceImp
 
+    @Autowired
+    lateinit var employeeService: EmployeeServiceImp
+
     @Test
     fun contextLoads() {
+    }
+
+    @BeforeEach
+    fun initDatabase() {
+        productService.createProduct(
+            ean = "1234567890100", name = "IPhone 12", brand = "Apple"
+        )
+        profileService.createProfile(
+            email = "milad.be@gmail.com", name = "Milad", lastname = "Beigi"
+        )
+        employeeService.addExpert(
+            name = "Milad", lastname = "B", email = "milad.be@gmail.com", "", "1"
+        )
+        employeeService.addManager(
+            name = "Milad", lastname = "B", email = "milad.be@gmail.com")
+
+    }
+
+    @AfterEach
+    fun cleanDatabase() {
+        ticketHistoryRepository.deleteAll()
+        ticketRepository.deleteAll()
+        productRepository.deleteAll()
+        profileRepository.deleteAll()
+        expertRepository.deleteAll()
+        managerRepository.deleteAll()
     }
 
     @Test
     fun createProfile() {
         profileService.createProfile(
-            email = "milad@gmail.com", name = "M", lastname = "B"
+            email = "milad@gmail.com", name = "Milad", lastname = "B"
         )
     }
 
     @Test
     fun createProduct() {
         productService.createProduct(
-            ean = "1234567890122", name = "Test product", brand = "IPhone 6"
+            ean = "1234567890101", name = "Test product", brand = "IPhone 6"
         )
     }
 
     @Test
     fun createTicket() {
-        productService.createProduct(
-            ean = "1234567890123", name = "IPhone 12", brand = "Apple"
-        )
-        profileService.createProfile(
-            email = "milad.be@gmail.com", name = "M", lastname = "B"
-        )
-
         assertThrows<ProfileNotFoundException> {
             ticketService.createTicket(
                 title = "Test ticket",
                 description = "Test ticket description",
-                productId = "1234567890123",
+                productId = "1234567890100",
                 profileId = ""
             )
         }
@@ -110,29 +145,20 @@ class ServerApplicationTests {
         val ticketId: Long? = ticketService.createTicket(
             title = "Test ticket",
             description = "Test ticket description",
-            productId = "1234567890123",
+            productId = "1234567890100",
             profileId = "milad.be@gmail.com"
         )
 
         assert(ticketId != null)
     }
 
-    // TODO: Add tests for the following functions
     @Test
     fun startTicket() {
-        productService.createProduct(
-            ean = "1234567890113", name = "IPhone 12", brand = "Apple"
-        )
-
-        profileService.createProfile(
-            email = "m@gmail.com", name = "M", lastname = "B"
-        )
-
         val ticketId: Long? = ticketService.createTicket(
             title = "Test ticket",
             description = "Test ticket description",
-            productId = "1234567890113",
-            profileId = "m@gmail.com"
+            productId = "1234567890100",
+            profileId = "milad.be@gmail.com"
         )
 
         assertThrows<TicketExceptions> { ticketService.startTicket(ticketId.toString()) }
@@ -145,18 +171,11 @@ class ServerApplicationTests {
 
     @Test
     fun stopTicket() {
-        productService.createProduct(
-            ean = "1234567890114", name = "IPhone 12", brand = "Apple"
-        )
-        profileService.createProfile(
-            email = "mb@gmail.com", name = "M", lastname = "B"
-        )
-
         val ticketId: Long? = ticketService.createTicket(
             title = "Test ticket",
             description = "Test ticket description",
-            productId = "1234567890114",
-            profileId = "mb@gmail.com"
+            productId = "1234567890100",
+            profileId = "milad.be@gmail.com"
         )
 
         ticketService.stopTicket(ticketId.toString())
@@ -166,30 +185,101 @@ class ServerApplicationTests {
 
     @Test
     fun closeTicket() {
-        assert(true)
+        val ticketId: Long? = ticketService.createTicket(
+            title = "Test ticket",
+            description = "Test ticket description",
+            productId = "1234567890100",
+            profileId = "milad.be@gmail.com"
+        )
+
+        ticketService.closeTicket(ticketId.toString())
+        assertThrows<TicketExceptions> { ticketService.closeTicket(ticketId.toString()) }
+        assert(ticketRepository.findById(ticketId!!).get().status == TicketStatus.Closed)
     }
 
     @Test
     fun reopenTicket() {
-        assert(true)
+        val ticketId: Long? = ticketService.createTicket(
+            title = "Test ticket",
+            description = "Test ticket description",
+            productId = "1234567890100",
+            profileId = "milad.be@gmail.com"
+        )
+
+        ticketService.closeTicket(ticketId.toString())
+        ticketService.reopenTicket(ticketId.toString())
+        assertThrows<TicketExceptions> { ticketService.reopenTicket(ticketId.toString()) }
+        assert(ticketRepository.findById(ticketId!!).get().status == TicketStatus.ReOpened)
+
     }
 
     @Test
     fun resolveTicket() {
-        assert(true)
+        val ticketId: Long? = ticketService.createTicket(
+            title = "Test ticket",
+            description = "Test ticket description",
+            productId = "1234567890100",
+            profileId = "milad.be@gmail.com"
+        )
+
+        ticketService.resolveTicket(ticketId.toString())
+        assertThrows<TicketExceptions> { ticketService.resolveTicket(ticketId.toString()) }
+        assert(ticketRepository.findById(ticketId!!).get().status == TicketStatus.Resolved)
     }
 
     @Test
     fun assignTicket() {
-        assert(true)
+        val ticketId: Long? = ticketService.createTicket(
+            title = "Test ticket",
+            description = "Test ticket description",
+            productId = "1234567890100",
+            profileId = "milad.be@gmail.com"
+        )
+
+        // Empty expert
+        assertThrows<Exception> {
+            ticketService.assignTicket(
+                ticketId.toString(),
+                title = "Test ticket",
+                description = "Test ticket description",
+                expert = "",
+                priority = "1"
+            )
+        }
+
+        // Empty priority
+        assertThrows<Exception> {
+            ticketService.assignTicket(
+                ticketId.toString(),
+                title = "Test ticket",
+                description = "Test ticket description",
+                expert = "1",
+                priority = ""
+            )
+        }
+
+        ticketService.assignTicket(
+            ticketId.toString(),
+            title = "Test ticket",
+            description = "Test ticket description",
+            expert = "1",
+            priority = "1"
+        )
+
+        // Assert ticket is assigned
+        assert(ticketRepository.findById(ticketId!!).get().expert == null)
+        assert(ticketRepository.findById(ticketId).get().priority == TicketPriority.Low)
+
+
     }
+
     @Test
     fun addExpert() {
         assert(true)
     }
 
     @Test
-    fun addManager(){
+    fun addManager() {
         assert(true)
     }
 

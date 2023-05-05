@@ -23,9 +23,10 @@ class EmployeeServiceImp (
             throw EmployeeExceptions("Expert with email $email already exists")
         }
 
-        // Check if manager exists by id
-        val manager = managerRepository.findById(managerId?.toLong() ?: 0).orElse(null) ?:
-            throw EmployeeExceptions("Manager with id $managerId does not exist")
+        // Check if manager exists by id and id is not null
+        val manager : Manager? = if (managerId.isNullOrEmpty()) null else {
+            managerRepository.findById(managerId.toLong()).orElse(null) ?: throw EmployeeExceptions("Manager with id $managerId does not exist")
+        }
 
         // Set the expertise based on the values in enum
         val expertise : Expertise = when (expertise) {
