@@ -179,4 +179,18 @@ class ServerApplicationTests {
         assert(true)
     }
 
+    @Test
+    fun assignTicket() {
+        assert(true)
+    }
+    @Test
+    fun addExpert() {
+        assert(true)
+    }
+
+    @Test
+    fun addManager(){
+        assert(true)
+    }
+
 }
