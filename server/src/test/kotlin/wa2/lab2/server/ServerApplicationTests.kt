@@ -275,12 +275,51 @@ class ServerApplicationTests {
 
     @Test
     fun addExpert() {
-        assert(true)
+        employeeService.addExpert(
+            name = "Alan", lastname = "Turing", email = "alan.turing@gmail.com", "", "1"
+        )
+
+        // repeated email
+        assertThrows<EmployeeExceptions> {
+            employeeService.addExpert(
+                name = "a", lastname = "t", email = "alan.turing@gmail.com", "", "1"
+            )
+        }
+
+        // empty expertise
+        assertThrows<EmployeeExceptions> {
+            employeeService.addExpert(
+                name = "a", lastname = "t", email = "alan.t@gmail.com", "", ""
+            )
+        }
+
+        // expertise does not exist
+        assertThrows<EmployeeExceptions> {
+            employeeService.addExpert(
+                name = "a", lastname = "t", email = "alan.t@gmail.com", "", "4"
+            )
+        }
+
+        // manager id does not exist
+        assertThrows<EmployeeExceptions> {
+            employeeService.addExpert(
+                name = "a", lastname = "t", email = "alan.t@gmail.com", "99", ""
+            )
+        }
+
     }
 
     @Test
     fun addManager() {
-        assert(true)
+        employeeService.addManager(
+            name = "Tim", lastname = "Berners-Lee", email = "tim.b@gmail.com")
+
+        // repeated email address
+        assertThrows<EmployeeExceptions> {
+            employeeService.addExpert(
+                name = "t", lastname = "b", email = "tim.b@gmail.com", "99", ""
+            )
+        }
     }
 
 }
