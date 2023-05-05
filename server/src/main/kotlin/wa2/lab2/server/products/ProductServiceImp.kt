@@ -23,4 +23,13 @@ class ProductServiceImp(private val productRepository: ProductRepository) : Prod
             return product
         }
     }
+
+    override fun createProduct(ean: String, name: String, brand: String): ProductDTO {
+        if (productRepository.existsById(ean)) {
+            throw ProductNotFoundException("Product with ean $ean already exists")
+        }
+        val savedProduct = productRepository.save(Product(ean, name, brand))
+        println("Product created: ${savedProduct.ean}")
+        return savedProduct.toDTO()
+    }
 }

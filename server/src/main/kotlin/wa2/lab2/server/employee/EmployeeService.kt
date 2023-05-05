@@ -1,0 +1,21 @@
+package wa2.lab2.server.employee
+
+interface EmployeeService {
+    fun addExpert(
+        name: String,
+        lastname: String,
+        email: String,
+        managerId: String?,
+        expertise: String
+    ): ExpertDTO
+
+    fun getExpert(
+        id: String?
+    ): Expert?
+
+    fun addManager(
+        name: String,
+        lastname: String,
+        email: String
+    ): ManagerDTO?
+}
