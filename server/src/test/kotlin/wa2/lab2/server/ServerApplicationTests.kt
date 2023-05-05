@@ -90,11 +90,13 @@ class ServerApplicationTests {
         profileService.createProfile(
             email = "milad.be@gmail.com", name = "Milad", lastname = "Beigi"
         )
+        employeeService.addManager(
+            name = "Milad", lastname = "B", email = "milad.be@gmail.com")
+
         employeeService.addExpert(
             name = "Milad", lastname = "B", email = "milad.be@gmail.com", "", "1"
         )
-        employeeService.addManager(
-            name = "Milad", lastname = "B", email = "milad.be@gmail.com")
+
 
     }
 
@@ -258,17 +260,20 @@ class ServerApplicationTests {
             )
         }
 
+        // Get expert
+        val expertId: Long? = expertRepository.findByEmail("milad.be@gmail.com")[0].id
+
         ticketService.assignTicket(
             ticketId.toString(),
             title = "Test ticket",
             description = "Test ticket description",
-            expert = "1",
+            expert = expertId.toString(),
             priority = "1"
         )
 
         // Assert ticket is assigned
-        assert(ticketRepository.findById(ticketId!!).get().expert == null)
-        assert(ticketRepository.findById(ticketId).get().priority == TicketPriority.Low)
+        assert(ticketRepository.findById(ticketId!!).get().expert != null)
+        assert(ticketRepository.findById(ticketId!!).get().priority == TicketPriority.Low)
 
 
     }
