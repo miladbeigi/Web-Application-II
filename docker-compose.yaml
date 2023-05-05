@@ -14,5 +14,9 @@ services:
       dockerfile: ./Dockerfile
       context: ./server
     container_name: server
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/products
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin@123
     ports:
       - 8080:8080
