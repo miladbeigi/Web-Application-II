@@ -19,3 +19,23 @@ data class TicketHistory(
     val date: LocalDate,
     val time: LocalTime
 )
+
+data class TicketHistoryDTO(
+    val id: Long? = null,
+    val ticket: String,
+    val previousStatus: String? = null,
+    val newStatus: String? = null,
+    val date: String,
+    val time: String
+)
+
+fun TicketHistory.toDTO(): TicketHistoryDTO {
+    return TicketHistoryDTO(
+        id = id,
+        ticket = ticket.id.toString(),
+        previousStatus = previousStatus?.name,
+        newStatus = newStatus.name,
+        date = date.toString(),
+        time = time.toString()
+    )
+}

@@ -76,6 +76,7 @@ class TicketServiceImp(
         priority: String?
     ): TicketDTO? {
 
+        if(ticketId.isNullOrEmpty()) throw TicketExceptions("Ticket id is not valid")
         // Check if the ticket exists
         val ticket: Ticket? = ticketRepository.findById(ticketId.toLong()).orElse(null)
             ?: throw TicketExceptions("Ticket with id $ticketId not found")
@@ -204,5 +205,18 @@ class TicketServiceImp(
             } else throw TicketExceptions("Ticket with id $ticketId cannot be resolved")
         }
         return null
+    }
+
+    override fun getTicketHistory(ticketId: String): List<TicketHistoryDTO>? {
+        // Check if id is valid
+        if(ticketId.isNullOrEmpty()) throw TicketExceptions("Ticket id is not valid")
+
+        // Check if the ticket exists
+        val ticket: Ticket? = ticketRepository.findById(ticketId.toLong()).orElse(null)
+            ?: throw TicketExceptions("Ticket with id $ticketId not found")
+
+        // Get the ticket history
+        val ticketHistory = ticketHistoryRepository.findAll().filter { it.ticket.id == ticket?.id }
+        return ticketHistory.map { it.toDTO() }
     }
 }

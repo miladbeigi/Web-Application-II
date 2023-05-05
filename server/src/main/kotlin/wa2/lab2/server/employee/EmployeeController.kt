@@ -11,7 +11,7 @@ class EmployeeController (
 ) {
 
     @PostMapping(
-        value = ["/expert/add"],
+        value = ["/api/expert/add"],
         consumes = ["application/json"],
         produces = ["application/json"]
     )
@@ -29,17 +29,17 @@ class EmployeeController (
         )
     }
     @PostMapping(
-        value = ["/manager/add"],
+        value = ["/api/manager/add"],
         consumes = ["application/json"],
         produces = ["application/json"]
     )
     fun addManager(@RequestBody
                    @Valid
-                   expert: ManagerDTO): ManagerDTO? {
+                   manager: ManagerDTO): ManagerDTO? {
         return employeeService.addManager(
-            name = expert.name,
-            lastname = expert.lastname,
-            email = expert.email
+            name = manager.name,
+            lastname = manager.lastname,
+            email = manager.email
         )
     }
 }

@@ -19,7 +19,11 @@ class TicketController (private val ticketService: TicketService) {
             ticket.profileId
         )
     }
-
+    @PutMapping(
+        value = ["/api/ticket/assign"],
+        consumes = ["application/json"],
+        produces = ["application/json"]
+    )
     fun assignTicket(@RequestBody @Valid ticket: TicketDTO): TicketDTO? {
         return ticketService.assignTicket(
             ticket.id,
@@ -67,5 +71,14 @@ class TicketController (private val ticketService: TicketService) {
     )
     fun resolveTicket(@PathVariable id: String): Long?{
         return ticketService.resolveTicket(id)
+    }
+    @GetMapping(
+        value = ["/api/ticket/history/{id}"],
+        produces = ["application/json"]
+    )
+    fun getTicketHistory(
+        @PathVariable id: String,
+    ) : List<TicketHistoryDTO>? {
+        return ticketService.getTicketHistory(id)
     }
 }

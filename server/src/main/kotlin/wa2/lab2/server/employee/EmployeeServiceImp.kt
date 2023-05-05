@@ -2,14 +2,14 @@ package wa2.lab2.server.employee
 
 import org.springframework.stereotype.Service
 import wa2.lab2.server.employee.exceptions.EmployeeExceptions
-import wa2.lab2.server.ticketing.TicketPriority
-import wa2.lab2.server.ticketing.exceptions.TicketExceptions
+
 
 @Service
 class EmployeeServiceImp (
     val expertRepository: ExpertRepository,
     val managerRepository: ManagerRepository
 ) : EmployeeService {
+    @OptIn(ExperimentalStdlibApi::class)
     override fun addExpert(
         name: String,
         lastname: String,
@@ -18,10 +18,14 @@ class EmployeeServiceImp (
         expertise: String
     ): ExpertDTO {
 
-        // Check if manager exists
-        val manager : Manager? = if (managerId == null) throw EmployeeExceptions("Manager id is not valid") else {
-            managerRepository.findById(managerId.toLong()).orElse(null)
+        // Check if expert exists by email
+        if (expertRepository.findByEmail(email).toList().isNotEmpty()) {
+            throw EmployeeExceptions("Expert with email $email already exists")
         }
+
+        // Check if manager exists by id
+        val manager = managerRepository.findById(managerId?.toLong() ?: 0).orElse(null) ?:
+            throw EmployeeExceptions("Manager with id $managerId does not exist")
 
         // Set the expertise based on the values in enum
         val expertise : Expertise = when (expertise) {
@@ -49,12 +53,12 @@ class EmployeeServiceImp (
 
     override fun getExpert(id: String?): Expert? {
         // Check if expert exists
-        if (id == null) throw EmployeeExceptions("Expert id is not valid")
+        if (id.isNullOrEmpty()) throw EmployeeExceptions("Expert id is not valid")
         return expertRepository.findById(id.toLong()).orElse(null) ?: return null
     }
     override fun addManager(name: String, lastname: String, email: String): ManagerDTO? {
         // Check if manager exists by email
-        if (managerRepository.findByEmail(email).isPresent) {
+        if (managerRepository.findByEmail(email).toList().isNotEmpty()) {
             throw EmployeeExceptions("Manager with email $email already exists")
         }
 

@@ -7,11 +7,13 @@ import java.util.*
 
 @Repository
 interface ExpertRepository : JpaRepository<Expert, Long> {
+    @Query("SELECT m FROM Expert m WHERE m.email = :email")
+    fun findByEmail(email: String): List<Expert>
 }
 
 @Repository
 interface ManagerRepository : JpaRepository<Manager, Long> {
 
     @Query("SELECT m FROM Manager m WHERE m.email = :email")
-    fun findByEmail(email: String): Optional<Manager>
+    fun findByEmail(email: String): List<Manager>
 }

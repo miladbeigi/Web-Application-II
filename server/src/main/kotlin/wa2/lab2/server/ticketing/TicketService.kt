@@ -1,6 +1,5 @@
 package wa2.lab2.server.ticketing
 
-import org.springframework.stereotype.Service
 
 
 interface TicketService {
@@ -34,4 +33,8 @@ interface TicketService {
     fun resolveTicket(
         ticketId: String
     ) : Long?
+
+    fun getTicketHistory(
+        ticketId: String
+    ) : List<TicketHistoryDTO>?
 }
