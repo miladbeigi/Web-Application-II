@@ -2,13 +2,13 @@ package wa.lab.server.ticketing
 
 import org.springframework.stereotype.Service
 import wa.lab.server.employee.EmployeeService
-import wa2.lab2.server.products.ProductService
-import wa2.lab2.server.profiles.ProfileService
-import wa2.lab2.server.products.exceptions.ProductNotFoundException
-import wa2.lab2.server.products.toEntity
-import wa2.lab2.server.profiles.exceptions.ProfileNotFoundException
-import wa2.lab2.server.profiles.toEntity
-import wa2.lab2.server.ticketing.exceptions.TicketExceptions
+import wa.lab.server.products.ProductService
+import wa.lab.server.profiles.ProfileService
+import wa.lab.server.products.exceptions.ProductNotFoundException
+import wa.lab.server.products.toEntity
+import wa.lab.server.profiles.exceptions.ProfileNotFoundException
+import wa.lab.server.profiles.toEntity
+import wa.lab.server.ticketing.exceptions.TicketExceptions
 import java.time.LocalDate
 import java.time.LocalTime
 

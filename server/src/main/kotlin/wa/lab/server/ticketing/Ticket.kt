@@ -4,9 +4,9 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.OneToOne
-import wa2.lab2.server.employee.Expert
-import wa2.lab2.server.products.Product
-import wa2.lab2.server.profiles.Profile
+import wa.lab.server.employee.Expert
+import wa.lab.server.products.Product
+import wa.lab.server.profiles.Profile
 
 @Entity
 data class Ticket(

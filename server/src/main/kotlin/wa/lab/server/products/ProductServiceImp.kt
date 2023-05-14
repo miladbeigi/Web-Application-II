@@ -2,7 +2,7 @@ package wa.lab.server.products
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import wa2.lab2.server.products.exceptions.ProductNotFoundException
+import wa.lab.server.products.exceptions.ProductNotFoundException
 
 @Service
 class ProductServiceImp(private val productRepository: ProductRepository) : ProductService {

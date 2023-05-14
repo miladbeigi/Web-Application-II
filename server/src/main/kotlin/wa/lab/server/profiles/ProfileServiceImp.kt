@@ -1,8 +1,8 @@
 package wa.lab.server.profiles
 
 import org.springframework.stereotype.Service
-import wa2.lab2.server.profiles.exceptions.ProfileAlreadyExistsException
-import wa2.lab2.server.profiles.exceptions.ProfileNotFoundException
+import wa.lab.server.profiles.exceptions.ProfileAlreadyExistsException
+import wa.lab.server.profiles.exceptions.ProfileNotFoundException
 
 @Service
 class ProfileServiceImp(private val profileRepository: ProfileRepository) : ProfileService {

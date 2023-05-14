@@ -1,7 +1,7 @@
 package wa.lab.server.employee
 
 import org.springframework.stereotype.Service
-import wa2.lab2.server.employee.exceptions.EmployeeExceptions
+import wa.lab.server.employee.exceptions.EmployeeExceptions
 
 
 @Service

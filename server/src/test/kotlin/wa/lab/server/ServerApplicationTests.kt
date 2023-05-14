@@ -1,33 +1,29 @@
 package wa.lab.server
 
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeAll
+
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
+
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.annotation.DirtiesContext
+
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
-import wa.lab.server.employee.EmployeeServiceImp
-import wa.lab.server.employee.ExpertRepository
-import wa2.lab2.server.employee.Expertise
-import wa.lab.server.employee.ManagerRepository
-import wa2.lab2.server.employee.exceptions.EmployeeExceptions
-import wa2.lab2.server.products.ProductRepository
-import wa2.lab2.server.products.ProductServiceImp
-import wa2.lab2.server.products.exceptions.ProductNotFoundException
-import wa2.lab2.server.profiles.ProfileRepository
-import wa2.lab2.server.profiles.ProfileServiceImp
-import wa2.lab2.server.profiles.exceptions.ProfileNotFoundException
-import wa2.lab2.server.ticketing.*
-import wa2.lab2.server.ticketing.exceptions.TicketExceptions
+import wa.lab.server.employee.exceptions.EmployeeExceptions
+import wa.lab.server.products.ProductRepository
+import wa.lab.server.products.ProductServiceImp
+import wa.lab.server.products.exceptions.ProductNotFoundException
+import wa.lab.server.profiles.ProfileRepository
+import wa.lab.server.profiles.ProfileServiceImp
+import wa.lab.server.profiles.exceptions.ProfileNotFoundException
+import wa.lab.server.ticketing.*
+import wa.lab.server.ticketing.exceptions.TicketExceptions
 
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
