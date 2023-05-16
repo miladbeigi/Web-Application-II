@@ -32,7 +32,7 @@ class KeycloakLogoutHandler() : LogoutHandler {
             builder.toUriString(), String::class.java
         )
         if (logoutResponse.statusCode.is2xxSuccessful) {
-                println("Successfulley logged out from Keycloak")
+                println("Successfully logged out from Keycloak")
         } else {
                 println("Could not propagate logout to Keycloak")
         }
