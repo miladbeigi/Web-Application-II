@@ -22,6 +22,7 @@ class SecurityConfig(private val keycloakLogoutHandler: KeycloakLogoutHandler) {
     @Bean
     @Throws(Exception::class)
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
+
         http.authorizeHttpRequests()
             .requestMatchers("/api/expert/add", "/api/manager/add", "/api/ticket/*", "/api/profiles/*")
             .hasRole("Manager")
@@ -33,6 +34,7 @@ class SecurityConfig(private val keycloakLogoutHandler: KeycloakLogoutHandler) {
             .permitAll()
 
         http.oauth2Login()
+            .loginPage("/login-oauth2")
             .and()
             .logout()
             .addLogoutHandler(keycloakLogoutHandler)
