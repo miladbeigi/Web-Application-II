@@ -14,13 +14,14 @@ data class ProfileDTO(
 
     @field: NotEmpty(message = "Lastname is required")
     @field: NotNull(message = "Lastname is required")
-    val lastname: String
+    val lastname: String,
+    val password: String? = null
 )
 
 fun Profile.toDTO(): ProfileDTO {
-    return ProfileDTO(email, name, lastname)
+    return ProfileDTO(email, name, lastname, password)
 }
 
 fun ProfileDTO.toEntity(): Profile {
-    return Profile(email, name, lastname)
+    return Profile(email, name, lastname, password)
 }

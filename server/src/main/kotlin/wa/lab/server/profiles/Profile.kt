@@ -10,5 +10,6 @@ data class Profile (
     @Id
     var email: String = "",
     var name: String = "",
-    var lastname: String = ""
+    var lastname: String = "",
+    var password: String? = ""
 )

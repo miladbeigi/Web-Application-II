@@ -9,4 +9,8 @@ class KeycloakProperties {
     lateinit var realm: String
     lateinit var resource: String
     lateinit var callback: String
+    lateinit var adminUsername: String
+    lateinit var adminPassword: String
+    lateinit var adminClient: String
+    lateinit var adminRealm : String
 }

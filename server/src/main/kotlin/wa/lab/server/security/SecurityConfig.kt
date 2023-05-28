@@ -43,6 +43,7 @@ class SecurityConfig(private val keycloakLogoutHandler: KeycloakLogoutHandler) {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
         http.oauth2ResourceServer { obj: OAuth2ResourceServerConfigurer<HttpSecurity?> -> obj.jwt() }
+        http.cors().and().csrf().disable()
         return http.build()
     }
 }
