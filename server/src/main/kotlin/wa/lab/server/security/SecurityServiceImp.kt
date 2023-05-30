@@ -31,8 +31,16 @@ class SecurityServiceImp : SecurityService {
     // create profile service
     @Autowired
     lateinit var profileService: ProfileServiceImp
+
     override fun handleLogin(username: String, password: String): String {
-        return "Login successful"
+        val keycloak: Keycloak = KeycloakBuilder.builder()
+            .realm(keycloakProperties.realm)
+            .serverUrl(keycloakProperties.authServerUrl)
+            .clientId(keycloakProperties.resource)
+            .username(username)
+            .password(password).build()
+
+        return keycloak.tokenManager().accessToken.toString()
     }
 
     @Transactional
@@ -57,7 +65,7 @@ class SecurityServiceImp : SecurityService {
         keycloak.tokenManager().accessToken
         val realmResource = keycloak.realm(keycloakProperties.realm)
         // Create the user in Keycloak
-        var response: Response = realmResource.users().create(userRepresentation)
+        val response: Response = realmResource.users().create(userRepresentation)
         println(response.statusInfo)
         println(response.status)
         println(response.location)

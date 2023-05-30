@@ -14,6 +14,12 @@ class SecurityController (private val securityService: SecurityService) {
     @Autowired
     private lateinit var keycloakProperties: KeycloakProperties
 
+    @PostMapping("/login")
+    fun login(@RequestBody loginRequest: LoginRequest): String {
+        return securityService.handleLogin(loginRequest.username, loginRequest.password)
+    }
+
+
     @GetMapping("/login")
     fun login(response: HttpServletResponse) {
         val keycloakUrl = "${keycloakProperties.authServerUrl}/realms/${keycloakProperties.realm}/protocol/openid-connect/auth"
@@ -34,3 +40,5 @@ class SecurityController (private val securityService: SecurityService) {
         return securityService.signup(profile.email, profile.name, profile.lastname, profile.password)
     }
 }
+
+data class LoginRequest(val username: String, val password: String)
