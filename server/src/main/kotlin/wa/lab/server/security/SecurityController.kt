@@ -2,6 +2,7 @@ package wa.lab.server.security
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -15,7 +16,7 @@ class SecurityController (private val securityService: SecurityService) {
     private lateinit var keycloakProperties: KeycloakProperties
 
     @PostMapping("/login")
-    fun login(@RequestBody loginRequest: LoginRequest): String {
+    fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<Any> {
         return securityService.handleLogin(loginRequest.username, loginRequest.password)
     }
 
