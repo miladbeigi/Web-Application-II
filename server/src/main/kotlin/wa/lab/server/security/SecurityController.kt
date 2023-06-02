@@ -1,4 +1,5 @@
 package wa.lab.server.security
+import io.micrometer.observation.annotation.Observed
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 import wa.lab.server.profiles.ProfileDTO
 
 @RestController
+@Observed
 class SecurityController (private val securityService: SecurityService) {
 
     @Autowired

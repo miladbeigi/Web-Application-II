@@ -1,11 +1,13 @@
 package wa.lab.server.employee
 
+import io.micrometer.observation.annotation.Observed
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
+@Observed
 class EmployeeController (
     val employeeService: wa.lab.server.employee.EmployeeService
 ) {
