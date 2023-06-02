@@ -1,9 +1,11 @@
 package wa.lab.server.ticketing
 
+import io.micrometer.observation.annotation.Observed
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 
 @RestController
+@Observed
 class TicketController (private val ticketService: TicketService) {
 
     @PostMapping(

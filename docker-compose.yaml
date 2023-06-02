@@ -46,8 +46,6 @@ services:
       - GF_AUTH_DISABLE_LOGIN_FORM=true
     ports:
       - "3000:3000"
-  # Prometheus: http://localhost:9090/
-  # Grafana: http://localhost:3000/
 
   postgres:
     image: postgres
@@ -78,17 +76,24 @@ services:
     ports:
       - "8081:8080"
   
-  # server:
-  #   build:
-  #     dockerfile: ./Dockerfile
-  #     context: ./server
-  #   container_name: server
-  #   environment:
-  #     - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/products
-  #     - SPRING_DATASOURCE_USERNAME=admin
-  #     - SPRING_DATASOURCE_PASSWORD=admin@123
-  #   ports:
-  #     - 8080:8080
+  server:
+    build:
+      dockerfile: ./Dockerfile
+      context: ./server
+    container_name: server
+    depends_on:
+      - postgres
+      - keycloak
+      - loki
+      - tempo
+      - prometheus
+      - grafana
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/products
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin@123
+    ports:
+      - 8080:8080
 
 volumes:
   data:
