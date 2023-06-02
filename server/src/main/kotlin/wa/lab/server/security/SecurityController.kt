@@ -17,7 +17,7 @@ class SecurityController (private val securityService: SecurityService) {
 
     @PostMapping("/login")
     fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<Any> {
-        return securityService.handleLogin(loginRequest.username, loginRequest.password)
+        return securityService.login(loginRequest.username, loginRequest.password)
     }
 
 
@@ -38,7 +38,7 @@ class SecurityController (private val securityService: SecurityService) {
         consumes = ["application/json"],
         produces = ["application/json"])
     fun signup(@RequestBody @Valid profile: ProfileDTO): String {
-        return securityService.signup(profile.email, profile.name, profile.lastname, profile.password)
+        return securityService.signup(profile.email, profile.name, profile.lastname, profile.password, null)
     }
 }
 

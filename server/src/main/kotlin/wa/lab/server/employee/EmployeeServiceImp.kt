@@ -1,7 +1,10 @@
 package wa.lab.server.employee
 
+import jakarta.transaction.Transactional
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import wa.lab.server.employee.exceptions.EmployeeExceptions
+import wa.lab.server.security.SecurityServiceImp
 
 
 @Service
@@ -9,7 +12,11 @@ class EmployeeServiceImp (
     val expertRepository: wa.lab.server.employee.ExpertRepository,
     val managerRepository: wa.lab.server.employee.ManagerRepository
 ) : wa.lab.server.employee.EmployeeService {
-    @OptIn(ExperimentalStdlibApi::class)
+
+    @Autowired
+    lateinit var securityServiceImp: SecurityServiceImp
+
+    @Transactional
     override fun addExpert(
         name: String,
         lastname: String,
@@ -29,7 +36,7 @@ class EmployeeServiceImp (
         }
 
         // Set the expertise based on the values in enum
-        val expertise : wa.lab.server.employee.Expertise = when (expertise) {
+        val expertOf : wa.lab.server.employee.Expertise = when (expertise) {
             "1" -> wa.lab.server.employee.Expertise.Hardware
             "2" -> wa.lab.server.employee.Expertise.Software
             "3" -> wa.lab.server.employee.Expertise.Network
@@ -43,10 +50,15 @@ class EmployeeServiceImp (
             lastname = lastname,
             email = email,
             manager = manager,
-            expertise = expertise
+            expertise = expertOf
         )
         // Save expert
         expertRepository.save(expert)
+        try {
+            securityServiceImp.signup(email, name, lastname, "DefaultPassword", "Expert")
+        } catch (e: Exception) {
+            throw EmployeeExceptions("Error creating user in Keycloak")
+        }
 
         // Return expert
         return expert.toDTO()

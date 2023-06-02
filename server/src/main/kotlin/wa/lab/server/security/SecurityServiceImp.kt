@@ -26,7 +26,7 @@ class SecurityServiceImp : SecurityService {
     @Autowired
     lateinit var profileService: ProfileServiceImp
 
-    override fun handleLogin(username: String, password: String): ResponseEntity<Any> {
+    override fun login(username: String, password: String): ResponseEntity<Any> {
         val keycloak: Keycloak = KeycloakBuilder.builder()
             .realm(keycloakProperties.realm)
             .serverUrl(keycloakProperties.authServerUrl)
@@ -41,11 +41,10 @@ class SecurityServiceImp : SecurityService {
         } catch (ex: BadRequestException) {
             ResponseEntity.status(HttpStatus.FORBIDDEN).body<Any>(accessTokenResponse)
         }
-
     }
 
     @Transactional
-    override fun signup(email: String, name: String, lastname: String, password: String?): String {
+    override fun signup(email: String, name: String, lastname: String, password: String?, role: String?): String {
 
         val keycloak: Keycloak = KeycloakBuilder.builder()
             .serverUrl(keycloakProperties.authServerUrl)
@@ -60,6 +59,7 @@ class SecurityServiceImp : SecurityService {
         userRepresentation.username = email
         userRepresentation.email = email
         userRepresentation.isEnabled = true
+        userRepresentation.isEmailVerified = true
 
         // Create CredentialRepresentation object and set the password
         val credential = CredentialRepresentation()
@@ -74,11 +74,20 @@ class SecurityServiceImp : SecurityService {
         profileService.createProfile(email, name, lastname)
         keycloak.tokenManager().accessToken
         val realmResource = keycloak.realm(keycloakProperties.realm)
+
         // Create the user in Keycloak
         val response: Response = realmResource.users().create(userRepresentation)
-        println(response.statusInfo)
-        println(response.status)
-        println(response.location)
+
+        if (response.status != 201) {
+            throw RuntimeException("Error creating user in Keycloak")
+        }
+
+        // Assign the user to the role if role is not null
+        if (role != null) {
+            val roleRepresentation = realmResource.roles().get(role).toRepresentation()
+            val userId = realmResource.users().searchByEmail(email, true)[0].id
+            realmResource.users().get(userId).roles().realmLevel().add(listOf(roleRepresentation))
+        }
 
         return response.statusInfo.toString()
 

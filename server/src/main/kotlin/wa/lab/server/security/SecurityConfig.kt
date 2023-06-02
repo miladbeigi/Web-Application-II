@@ -24,7 +24,7 @@ class SecurityConfig(private val keycloakLogoutHandler: KeycloakLogoutHandler) {
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
 
         http.authorizeHttpRequests()
-            .requestMatchers("/api/expert/add", "/api/manager/add", "/api/ticket/*", "/api/profiles/*")
+            .requestMatchers("/createExpert", "/api/manager/add", "/api/ticket/**", "/api/profiles/**")
             .hasRole("Manager")
             .requestMatchers("/api/ticket/start/*", "/api/ticket/stop/*", "/api/ticket/reopen/*", "/api/ticket/close/*", "/api/ticket/resolve/*")
             .hasRole("Expert")

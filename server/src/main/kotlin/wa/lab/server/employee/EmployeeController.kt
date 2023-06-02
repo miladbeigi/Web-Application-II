@@ -11,7 +11,7 @@ class EmployeeController (
 ) {
 
     @PostMapping(
-        value = ["/api/expert/add"],
+        value = ["/createExpert"],
         consumes = ["application/json"],
         produces = ["application/json"]
     )
